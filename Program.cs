@@ -13,10 +13,28 @@ class Program
         // Build the connection string
         var connectionString = ConnectionStringBuilder.BuildConnectionString(config.Database);
 
-        // Set up the DbContext
-        var options = new DbContextOptionsBuilder<YourDbContext>()
-            .UseNpgsql(connectionString)
-            .Options;
+        // Set up the DbContext based on the database type
+        var optionsBuilder = new DbContextOptionsBuilder<YourDbContext>();
+
+        switch (config.Database.DbType.ToLower())
+        {
+            case "pqsl": // PostgreSQL
+                optionsBuilder.UseNpgsql(connectionString);
+                break;
+            case "sql": // MSSQL
+                optionsBuilder.UseSqlServer(connectionString);
+                break;
+            case "oracle": // Oracle
+                optionsBuilder.UseOracle(connectionString);
+                break;
+            case "mariadb": // MariaDB/MySQL
+                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+                break;
+            default:
+                throw new NotSupportedException($"Unsupported database type: {config.Database.DbType}");
+        }
+
+        var options = optionsBuilder.Options;
 
         using (var context = new YourDbContext(options))
         {
