@@ -7,7 +7,7 @@ Welcome to the **Monitoring Program**! This is a powerful and flexible tool desi
 ## Features
 
 - **Dynamic Query Execution**: Execute SQL queries stored in a configuration file.
-- **Multiple Database Support**: Works with PostgreSQL, MSSQL, Oracle, and MariaDB/MySQL.
+- **Multiple Database Support**: Works with PostgreSQL, MSSQL, and Oracle.
 - **Email Notifications**: Send query results as an HTML table in an email.
 - **Flexible Configuration**: Configure database connections, SMTP settings, and queries in a single file (`data.config`).
 - **CSV Attachment**: Attach query results as a CSV file in the email.
@@ -49,10 +49,6 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 For Oracle:
 ```bash
 dotnet add package Oracle.EntityFrameworkCore
-```
-For MariaDB/MySQL:
-```bash
-dotnet add package Pomelo.EntityFrameworkCore.MySql
 ```
 Core Packages (Required for All Databases):
 ```bash
