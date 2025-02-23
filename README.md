@@ -65,8 +65,8 @@ Create a data.config file in the project root directory. This file contains all 
 
 ```yaml
 # Database Config
-# dbType = posgre: pqsl, mssql : sql, oracle: oracle, mariaDB: mariaDB
-dbType=pqsl
+# dbType = posgre: psql, mssql : sql, oracle: oracle, mariaDB: mariaDB
+dbType=psql
 dbIP=127.0.0.1
 dbPort=5432
 dbDatabase=Test
