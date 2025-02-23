@@ -131,30 +131,7 @@ dotnet run
 
 ---
 ## Example Output
-<html>
-<head>
-</head>
-<body>
-    <h3>Table_1</h3>
-    <table>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Status</th>
-        </tr>
-        <tr>
-            <td>1</td>
-            <td>John Doe</td>
-            <td>Active</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>Jane Smith</td>
-            <td>Inactive</td>
-        </tr>
-    </table>
-</body>
-</html>
+![image info](./example_output.png)
 
 ### CSV Attachment
 ```csv
