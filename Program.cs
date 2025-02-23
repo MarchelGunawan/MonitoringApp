@@ -7,8 +7,6 @@ class Program
     {
         // Parse the configuration file
         var config = ConfigParser.ParseConfig("data.config");
-        
-        List<dynamic> results = new List<dynamic>();
 
         // Build the connection string
         var connectionString = ConnectionStringBuilder.BuildConnectionString(config.Database);
@@ -18,7 +16,7 @@ class Program
 
         switch (config.Database.DbType.ToLower())
         {
-            case "pqsl": // PostgreSQL
+            case "psql": // PostgreSQL
                 optionsBuilder.UseNpgsql(connectionString);
                 break;
             case "sql": // MSSQL
@@ -26,9 +24,6 @@ class Program
                 break;
             case "oracle": // Oracle
                 optionsBuilder.UseOracle(connectionString);
-                break;
-            case "mariadb": // MariaDB/MySQL
-                optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
                 break;
             default:
                 throw new NotSupportedException($"Unsupported database type: {config.Database.DbType}");
@@ -41,14 +36,20 @@ class Program
             var monitoringService = new MonitoringService(context, config.Smtp);
             var email_body = "<html><head><style>table, th, td { border: 1px solid black; border-collapse: collapse; padding: 5px; }</style></head><body>";
 
-            // Execute each query and send the results via email
+            // Store query results in a dictionary
+            var queryResults = new Dictionary<string, List<dynamic>>();
+
+            // Execute each query and store the results
             foreach (var queryName in config.Query.QueryData)
             {
                 if (config.Query.Queries.TryGetValue(queryName, out var sql))
                 {
                     Console.WriteLine($"Executing query: {queryName}");
-                    results = monitoringService.ExecuteQuery(sql);
-                    Console.WriteLine(results.Select(r => string.Join(",", ((IDictionary<string, object>)r).Values)));
+                    var results = monitoringService.ExecuteQuery(sql);
+                    queryResults[queryName] = results;
+
+                    
+
                     email_body += "<h2>" + queryName + "</h2>";
 
                     if (results.Any())
@@ -88,7 +89,7 @@ class Program
 
             // Send the results via email
             var subject = config.Smtp.EmailSubject.Replace("(yyyy-mm-dd_now)", DateTime.Now.ToString("yyyy-MM-dd"));
-            monitoringService.SendEmail(subject, email_body, results);
+            monitoringService.SendEmail(subject, email_body, queryResults);
         }
     }
 }
